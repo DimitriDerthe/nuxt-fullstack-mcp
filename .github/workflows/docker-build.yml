@@ -82,7 +82,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to Docker Hub
-        if: needs.test.outputs.should-deploy == 'true'
+        if: needs.test.outputs.should-deploy == 'true' && secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != ''
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -111,7 +111,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Build and push Docker image (production)
-        if: needs.test.outputs.should-deploy == 'true'
+        if: needs.test.outputs.should-deploy == 'true' && secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != ''
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -122,13 +122,34 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Notice - Docker credentials missing
+        if: needs.test.outputs.should-deploy == 'true' && (secrets.DOCKERHUB_USERNAME == '' || secrets.DOCKERHUB_TOKEN == '')
+        run: |
+          echo "⚠️ Docker Hub credentials missing (DOCKERHUB_USERNAME and/or DOCKERHUB_TOKEN)"
+          echo "Will build image locally but skip Docker Hub push"
+          echo "To enable Docker Hub publishing, add the missing secrets to repository settings"
+
+      - name: Build Docker image (no push - missing credentials)
+        if: needs.test.outputs.should-deploy == 'true' && (secrets.DOCKERHUB_USERNAME == '' || secrets.DOCKERHUB_TOKEN == '')
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: false
+          tags: ${{ env.IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
       - name: Test Docker image
         run: |
           # Determine which image to test
-          if [[ "${{ needs.test.outputs.should-deploy }}" == "true" ]]; then
+          if [[ "${{ needs.test.outputs.should-deploy }}" == "true" ]] && [[ "${{ secrets.DOCKERHUB_USERNAME }}" != "" ]] && [[ "${{ secrets.DOCKERHUB_TOKEN }}" != "" ]]; then
             IMAGE_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.test.outputs.image-tag }}"
             echo "Testing pushed image: $IMAGE_TAG"
             docker pull "$IMAGE_TAG"
+          elif [[ "${{ needs.test.outputs.should-deploy }}" == "true" ]]; then
+            IMAGE_TAG="${{ env.IMAGE_NAME }}:latest"
+            echo "Testing local image (no push): $IMAGE_TAG"
           else
             IMAGE_TAG="${{ env.IMAGE_NAME }}:test"
             echo "Testing local image: $IMAGE_TAG"
