@@ -1,7 +1,8 @@
 import type { McpToolContext } from '../types'
 
 export function promptDesignExpert({ mcp, modules }: McpToolContext): void {
-  if (!modules.hasUIUXNeeds) return
+  if (!modules.hasUIUXNeeds)
+    return
 
   mcp.prompt('design-expert', () => {
     const systemPrompt = `# UI/UX Design Expert

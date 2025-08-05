@@ -1,8 +1,9 @@
-import type { McpToolContext, UIUXAuditResult, ColorPalette, DesignSystemConfig } from '../types'
+import type { ColorPalette, McpToolContext } from '../types'
 import { z } from 'zod'
 
 export function toolsUIUXDesign({ mcp, modules }: McpToolContext): void {
-  if (!modules.hasUIUXNeeds) return
+  if (!modules.hasUIUXNeeds)
+    return
 
   mcp.tool(
     'analyze-ui-hierarchy',
@@ -12,12 +13,11 @@ export function toolsUIUXDesign({ mcp, modules }: McpToolContext): void {
         .describe('Type of interface to analyze'),
       elements: z.array(z.string())
         .describe('List of UI elements to analyze (headers, buttons, images, etc.)'),
-      goals: z.array(z.string()).optional()
-        .describe('Primary goals/actions users should take'),
+      goals: z.array(z.string()).optional().describe('Primary goals/actions users should take'),
     },
     async ({ designType, elements, goals = [] }) => {
       const analysis = analyzeVisualHierarchy(designType, elements, goals)
-      
+
       return {
         content: [{
           type: 'text',
@@ -41,12 +41,11 @@ export function toolsUIUXDesign({ mcp, modules }: McpToolContext): void {
         .describe('Primary conversion goal'),
       audience: z.string()
         .describe('Target audience description'),
-      seoKeywords: z.array(z.string()).optional()
-        .describe('Primary SEO keywords to optimize for'),
+      seoKeywords: z.array(z.string()).optional().describe('Primary SEO keywords to optimize for'),
     },
     async ({ businessType, goal, audience, seoKeywords = [] }) => {
       const structure = generateLandingPageStructure(businessType, goal, audience, seoKeywords)
-      
+
       return {
         content: [{
           type: 'text',
@@ -76,7 +75,7 @@ export function toolsUIUXDesign({ mcp, modules }: McpToolContext): void {
     },
     async ({ dashboardType, userRole, dataComplexity, devicePrimary }) => {
       const layout = generateDashboardLayout(dashboardType, userRole, dataComplexity, devicePrimary)
-      
+
       return {
         content: [{
           type: 'text',
@@ -99,14 +98,13 @@ export function toolsUIUXDesign({ mcp, modules }: McpToolContext): void {
         .describe('Brand personality traits'),
       industry: z.string()
         .describe('Industry/sector for cultural color considerations'),
-      baseColor: z.string().optional()
-        .describe('Base color in hex format (e.g., #3B82F6)'),
+      baseColor: z.string().optional().describe('Base color in hex format (e.g., #3B82F6)'),
       accessibility: z.enum(['AA', 'AAA'])
         .describe('WCAG accessibility level to meet'),
     },
     async ({ brandPersonality, industry, baseColor, accessibility }) => {
       const palette = generateColorPalette(brandPersonality, industry, baseColor, accessibility)
-      
+
       return {
         content: [{
           type: 'text',
@@ -130,12 +128,11 @@ export function toolsUIUXDesign({ mcp, modules }: McpToolContext): void {
         .describe('Current steps in the user flow'),
       conversionGoal: z.string()
         .describe('Ultimate conversion goal'),
-      userPainPoints: z.array(z.string()).optional()
-        .describe('Known user pain points or friction areas'),
+      userPainPoints: z.array(z.string()).optional().describe('Known user pain points or friction areas'),
     },
     async ({ flowType, currentSteps, conversionGoal, userPainPoints = [] }) => {
       const evaluation = evaluateUserFlow(flowType, currentSteps, conversionGoal, userPainPoints)
-      
+
       return {
         content: [{
           type: 'text',
@@ -163,7 +160,7 @@ export function toolsUIUXDesign({ mcp, modules }: McpToolContext): void {
     },
     async ({ designSystem, targetDevices, contentType }) => {
       const breakpoints = generateResponsiveBreakpoints(designSystem, targetDevices, contentType)
-      
+
       return {
         content: [{
           type: 'text',
@@ -189,71 +186,71 @@ function generateLandingPageStructure(businessType: string, goal: string, audien
         examples: {
           saas: 'Increase your team productivity by 40% in 30 days or your money back',
           ecommerce: 'Get premium quality products delivered in 24 hours with free returns',
-          service: 'Transform your business with expert consulting - results guaranteed in 90 days'
-        }
+          service: 'Transform your business with expert consulting - results guaranteed in 90 days',
+        },
       },
       subheadline: {
         purpose: 'Elaborate on the value proposition with emotional benefits',
         length: '10-20 words',
-        focus: 'How it feels to use the product/service'
+        focus: 'How it feels to use the product/service',
       },
       cta: {
         primary: true,
         position: 'Above the fold',
         text: getOptimalCTAText(goal),
         color: 'High contrast, stands out from design',
-        size: 'Large enough for easy clicking (minimum 44px height)'
+        size: 'Large enough for easy clicking (minimum 44px height)',
       },
       heroImage: {
         type: businessType === 'saas' ? 'product-screenshot' : businessType === 'service' ? 'team-photo' : 'product-photo',
         purpose: 'Show the product in use or results achieved',
-        alt: 'Descriptive alt text for SEO and accessibility'
-      }
+        alt: 'Descriptive alt text for SEO and accessibility',
+      },
     },
     problemAgitation: {
       purpose: 'Identify and amplify the problem your audience faces',
       approach: 'Emotional connection before logical solution',
-      elements: ['Pain points', 'Current frustrations', 'Cost of inaction']
+      elements: ['Pain points', 'Current frustrations', 'Cost of inaction'],
     },
     solution: {
       purpose: 'Present your product/service as the ideal solution',
       structure: ['How it works', 'Key features', 'Unique advantages'],
-      presentation: 'Benefits-focused, not feature-focused'
+      presentation: 'Benefits-focused, not feature-focused',
     },
     socialProof: {
       types: ['Customer testimonials', 'Case studies', 'User reviews', 'Brand logos', 'Usage statistics'],
       placement: 'Throughout the page, especially near CTAs',
-      authenticity: 'Real names, photos, and specific results'
+      authenticity: 'Real names, photos, and specific results',
     },
     features: {
       presentation: 'Benefit-focused with icons',
       limit: '3-6 key features to avoid overwhelm',
-      structure: 'Feature name + benefit + brief explanation'
+      structure: 'Feature name + benefit + brief explanation',
     },
     testimonials: {
       format: 'Customer photo + quote + name + title/company',
       focus: 'Specific results and transformation',
-      placement: 'After problem/solution, before final CTA'
+      placement: 'After problem/solution, before final CTA',
     },
     pricing: {
       strategy: businessType === 'saas' ? 'tiered-pricing' : 'single-offer',
       elements: ['Clear pricing', 'Money-back guarantee', 'Payment security badges'],
-      psychology: 'Anchor pricing with most popular option highlighted'
+      psychology: 'Anchor pricing with most popular option highlighted',
     },
     faq: {
       purpose: 'Address common objections and concerns',
       seo: 'Target long-tail keywords and voice search queries',
-      structure: 'Most important questions first'
+      structure: 'Most important questions first',
     },
     finalCta: {
       urgency: 'Limited time offer or scarcity elements',
       riskreversal: 'Money-back guarantee or free trial',
-      reinforcement: 'Restate key benefit'
+      reinforcement: 'Restate key benefit',
     },
     footer: {
       trust: ['Contact info', 'Privacy policy', 'Terms of service'],
-      seo: ['Sitemap links', 'Social media links', 'Additional keyword targets']
-    }
+      seo: ['Sitemap links', 'Social media links', 'Additional keyword targets'],
+    },
   }
 
   return {
@@ -262,35 +259,35 @@ function generateLandingPageStructure(businessType: string, goal: string, audien
       title: `Target primary keyword in first 60 characters`,
       metaDescription: `Compelling 150-160 character description with primary keyword and CTA`,
       headingStructure: 'H1 (hero headline) → H2 (section headers) → H3 (subsections)',
-      keywords: keywords,
+      keywords,
       structuredData: ['Organization', 'Product', 'FAQ', 'Review'],
-      pageSpeed: ['Optimize images', 'Minify CSS/JS', 'Use CDN', 'Enable compression']
+      pageSpeed: ['Optimize images', 'Minify CSS/JS', 'Use CDN', 'Enable compression'],
     },
     conversionOptimization: {
       ctaPlacement: 'Every 3-4 screen scrolls',
       colorPsychology: getColorPsychologyForGoal(goal),
       trustSignals: ['Security badges', 'Testimonials', 'Guarantees', 'Awards'],
       urgency: ['Limited time offers', 'Stock counters', 'Social proof counters'],
-      formOptimization: 'Minimum required fields, single column layout, clear labels'
-    }
+      formOptimization: 'Minimum required fields, single column layout, clear labels',
+    },
   }
 }
 
 // Dashboard Layout Generation
 function generateDashboardLayout(type: string, role: string, complexity: string, device: string) {
   const layouts = {
-    analytics: {
+    'analytics': {
       structure: 'Grid-based with primary metrics prominently displayed',
       sections: {
         header: {
           elements: ['App logo', 'User profile', 'Notifications', 'Global search'],
           height: '60-70px',
-          sticky: true
+          sticky: true,
         },
         sidebar: {
           width: device === 'desktop' ? '240-280px' : 'collapsible',
           navigation: ['Overview', 'Analytics', 'Reports', 'Settings'],
-          style: 'Icon + text for desktop, icon-only for mobile'
+          style: 'Icon + text for desktop, icon-only for mobile',
         },
         mainContent: {
           layout: complexity === 'complex' ? 'multi-column-grid' : 'single-column',
@@ -298,50 +295,50 @@ function generateDashboardLayout(type: string, role: string, complexity: string,
             'Key metrics cards (4-6 primary KPIs)',
             'Primary visualization (chart/graph)',
             'Secondary metrics grid',
-            'Data table with pagination'
-          ]
+            'Data table with pagination',
+          ],
         },
         widgets: {
           sizing: 'Flexible grid system (12-column base)',
           responsive: 'Stack vertically on mobile',
-          interactions: 'Hover states, click to expand, drag to reorder'
-        }
-      }
+          interactions: 'Hover states, click to expand, drag to reorder',
+        },
+      },
     },
-    admin: {
+    'admin': {
       structure: 'Command center with quick actions and system status',
       sections: {
         header: {
           elements: ['System status', 'Quick actions', 'Admin tools', 'User management'],
-          importance: 'Critical system alerts prominent'
+          importance: 'Critical system alerts prominent',
         },
         sidebar: {
           sections: ['Dashboard', 'Users', 'Content', 'Settings', 'System'],
-          badges: 'Notification counts for pending items'
+          badges: 'Notification counts for pending items',
         },
         mainContent: {
           layout: 'Card-based with clear sections',
-          priority: ['System health', 'Recent activity', 'Quick actions', 'Statistics']
-        }
-      }
+          priority: ['System health', 'Recent activity', 'Quick actions', 'Statistics'],
+        },
+      },
     },
     'user-profile': {
       structure: 'Personal space with customization and account management',
       sections: {
         header: {
           elements: ['Profile photo', 'Name/title', 'Edit profile', 'Settings'],
-          style: 'Clean, personal, welcoming'
+          style: 'Clean, personal, welcoming',
         },
         navigation: {
           style: 'Tab-based or card-based sections',
-          sections: ['Overview', 'Account', 'Privacy', 'Billing', 'Activity']
+          sections: ['Overview', 'Account', 'Privacy', 'Billing', 'Activity'],
         },
         content: {
           layout: 'Form-based with clear sections',
-          elements: ['Profile info', 'Account settings', 'Activity feed', 'Connected accounts']
-        }
-      }
-    }
+          elements: ['Profile info', 'Account settings', 'Activity feed', 'Connected accounts'],
+        },
+      },
+    },
   }
 
   const specificLayout = layouts[type as keyof typeof layouts] || layouts.analytics
@@ -351,25 +348,25 @@ function generateDashboardLayout(type: string, role: string, complexity: string,
     responsive: {
       desktop: 'Full sidebar, multi-column content',
       tablet: 'Collapsible sidebar, adapted grid',
-      mobile: 'Bottom navigation, single column, swipe gestures'
+      mobile: 'Bottom navigation, single column, swipe gestures',
     },
     accessibility: {
       navigation: 'Keyboard accessible, ARIA labels',
       focus: 'Clear focus indicators',
       screenReader: 'Proper heading structure, alt text',
-      contrast: 'WCAG AA minimum (4.5:1 ratio)'
+      contrast: 'WCAG AA minimum (4.5:1 ratio)',
     },
     performance: {
       dataLoading: 'Progressive loading, skeleton screens',
       interactions: 'Smooth animations, immediate feedback',
-      optimization: 'Lazy load non-critical widgets'
+      optimization: 'Lazy load non-critical widgets',
     },
     usability: {
       cognitiveLoad: complexity === 'complex' ? 'Progressive disclosure' : 'All info visible',
       shortcuts: 'Keyboard shortcuts for power users',
       customization: role === 'admin' ? 'Full customization' : 'Limited personalization',
-      help: 'Contextual help, tooltips, onboarding'
-    }
+      help: 'Contextual help, tooltips, onboarding',
+    },
   }
 }
 
@@ -381,20 +378,20 @@ function analyzeVisualHierarchy(type: string, elements: string[], goals: string[
       element: el,
       priority: index + 1,
       issues: index > 2 ? ['Low visual weight for important element'] : [],
-      recommendations: index > 2 ? ['Increase size, contrast, or whitespace'] : ['Good positioning']
+      recommendations: index > 2 ? ['Increase size, contrast, or whitespace'] : ['Good positioning'],
     })),
     improvements: [
       'Primary CTA needs more visual weight (increase size by 20%)',
       'Hero headline should be larger than secondary text',
       'Use consistent spacing rhythm (8px base)',
-      'Improve color contrast for better accessibility'
+      'Improve color contrast for better accessibility',
     ],
     bestPractices: {
       fLayout: 'Users scan in F-pattern, prioritize left side',
       zPattern: 'For visual content, guide eye in Z-pattern',
       rule3: 'Limit to 3 primary focal points per screen',
-      whitespace: 'Use whitespace to group related elements'
-    }
+      whitespace: 'Use whitespace to group related elements',
+    },
   }
 }
 
@@ -410,9 +407,9 @@ function generateColorPalette(personality: string[], industry: string, baseColor
         contrastWhite: 4.5,
         contrastBlack: 9.2,
         wcagAA: true,
-        wcagAAA: accessibility === 'AAA'
-      }
-    }
+        wcagAAA: accessibility === 'AAA',
+      },
+    },
   ]
 
   return {
@@ -421,13 +418,13 @@ function generateColorPalette(personality: string[], industry: string, baseColor
     colors,
     harmony: {
       type: 'complementary',
-      description: 'Colors create visual balance and guide user attention'
+      description: 'Colors create visual balance and guide user attention',
     },
     psychology: {
       emotions: personality.includes('trustworthy') ? ['trust', 'reliability'] : ['energy', 'innovation'],
       associations: ['professionalism', 'quality', 'modern'],
-      culturalMeaning: ['Western: trust and stability', 'Global: technology and progress']
-    }
+      culturalMeaning: ['Western: trust and stability', 'Global: technology and progress'],
+    },
   }
 }
 
@@ -437,15 +434,15 @@ function evaluateUserFlow(type: string, steps: string[], goal: string, painPoint
     analysis: {
       dropOffPoints: steps.length > 5 ? ['Step 3: Too many form fields'] : [],
       friction: painPoints,
-      conversionRate: `Estimated ${Math.max(20, 100 - steps.length * 10)}% completion rate`
+      conversionRate: `Estimated ${Math.max(20, 100 - steps.length * 10)}% completion rate`,
     },
     optimizedSteps: steps.length > 3 ? steps.slice(0, 3) : steps,
     improvements: [
       'Reduce form fields by 50%',
       'Add progress indicator',
       'Include social proof at key decision points',
-      'Offer guest checkout option'
-    ]
+      'Offer guest checkout option',
+    ],
   }
 }
 
@@ -455,17 +452,17 @@ function getOptimalCTAText(goal: string): string {
     'sales': 'Buy Now',
     'signup': 'Start Free Trial',
     'download': 'Download Free',
-    'contact': 'Get In Touch'
+    'contact': 'Get In Touch',
   }
   return ctas[goal as keyof typeof ctas] || 'Get Started'
 }
 
 function getColorPsychologyForGoal(goal: string) {
   return {
-    'conversion': 'Orange/red for urgency, green for positive action',
-    'trust': 'Blue for reliability, white for cleanliness',
-    'luxury': 'Black/gold for premium feel',
-    'eco': 'Green for environmental consciousness'
+    conversion: 'Orange/red for urgency, green for positive action',
+    trust: 'Blue for reliability, white for cleanliness',
+    luxury: 'Black/gold for premium feel',
+    eco: 'Green for environmental consciousness',
   }
 }
 
@@ -476,7 +473,7 @@ function getConversionBestPractices(goal: string) {
     'Create urgency without being pushy',
     'Minimize form fields',
     'Add trust signals near CTAs',
-    'A/B test CTA colors and text'
+    'A/B test CTA colors and text',
   ]
 }
 
@@ -487,7 +484,7 @@ function getSEOBestPractices(keywords: string[]) {
     'H1 with primary keyword',
     'Internal linking strategy',
     'Image optimization with alt text',
-    'Page speed optimization (Core Web Vitals)'
+    'Page speed optimization (Core Web Vitals)',
   ]
 }
 
@@ -498,33 +495,35 @@ function getDashboardPatterns(type: string) {
     'Consistent navigation patterns',
     'Real-time data updates with loading states',
     'Contextual actions and bulk operations',
-    'Responsive data tables with sorting/filtering'
+    'Responsive data tables with sorting/filtering',
   ]
 }
 
 function getDashboardUsabilityTips(complexity: string) {
-  return complexity === 'complex' ? [
-    'Use progressive disclosure',
-    'Implement advanced filtering',
-    'Provide data export options',
-    'Include contextual help',
-    'Support keyboard shortcuts'
-  ] : [
-    'Keep interface clean and simple',
-    'Use clear visual hierarchy',
-    'Implement intuitive navigation',
-    'Provide quick actions',
-    'Ensure mobile responsiveness'
-  ]
+  return complexity === 'complex'
+    ? [
+        'Use progressive disclosure',
+        'Implement advanced filtering',
+        'Provide data export options',
+        'Include contextual help',
+        'Support keyboard shortcuts',
+      ]
+    : [
+        'Keep interface clean and simple',
+        'Use clear visual hierarchy',
+        'Implement intuitive navigation',
+        'Provide quick actions',
+        'Ensure mobile responsiveness',
+      ]
 }
 
 function generateResponsiveBreakpoints(system: string, devices: string[], contentType: string) {
   return {
     mobile: '320px - 768px',
-    tablet: '768px - 1024px', 
+    tablet: '768px - 1024px',
     desktop: '1024px - 1440px',
     largeDesktop: '1440px+',
-    implementation: 'Mobile-first approach with min-width media queries'
+    implementation: 'Mobile-first approach with min-width media queries',
   }
 }
 
@@ -533,7 +532,7 @@ function getColorImplementationGuide() {
     cssVariables: 'Use CSS custom properties for theme switching',
     designTokens: 'Implement design tokens for consistency',
     accessibility: 'Always test contrast ratios',
-    darkMode: 'Plan for dark mode variants'
+    darkMode: 'Plan for dark mode variants',
   }
 }
 
@@ -542,7 +541,7 @@ function getResponsiveImplementation() {
     approach: 'Mobile-first responsive design',
     units: 'Use relative units (rem, em, %) over fixed pixels',
     images: 'Responsive images with srcset attribute',
-    layout: 'CSS Grid and Flexbox for flexible layouts'
+    layout: 'CSS Grid and Flexbox for flexible layouts',
   }
 }
 
@@ -552,7 +551,7 @@ function getResponsiveTestingStrategy() {
     'Verify touch targets are minimum 44px',
     'Check readability at different screen sizes',
     'Test form usability on mobile devices',
-    'Validate loading performance on slower connections'
+    'Validate loading performance on slower connections',
   ]
 }
 
@@ -562,20 +561,20 @@ function getConversionOptimizationTips(flowType: string) {
       'Progressive onboarding over time',
       'Show value at each step',
       'Allow users to skip non-essential steps',
-      'Use progress indicators'
+      'Use progress indicators',
     ],
     checkout: [
       'Guest checkout option',
       'Multiple payment methods',
       'Security badges near payment info',
-      'Clear return/refund policy'
+      'Clear return/refund policy',
     ],
     signup: [
       'Social signup options',
       'Minimal required fields',
       'Clear value proposition',
-      'Email verification optional initially'
-    ]
+      'Email verification optional initially',
+    ],
   }
   return tips[flowType as keyof typeof tips] || []
 }

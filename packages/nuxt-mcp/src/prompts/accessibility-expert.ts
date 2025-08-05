@@ -1,7 +1,8 @@
 import type { McpToolContext } from '../types'
 
 export function promptAccessibilityExpert({ mcp, modules }: McpToolContext): void {
-  if (!modules.hasUIUXNeeds) return
+  if (!modules.hasUIUXNeeds)
+    return
 
   mcp.prompt('accessibility-expert', () => {
     const systemPrompt = `# Digital Accessibility Expert

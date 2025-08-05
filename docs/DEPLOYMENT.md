@@ -71,14 +71,14 @@ services:
   nuxt-fullstack-mcp:
     image: nuxt-fullstack-mcp:latest
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
     volumes:
       - ./data:/app/data
 
-  redis:        # Optional: Session storage
-  database:     # Optional: PostgreSQL database
+  redis: # Optional: Session storage
+  database: # Optional: PostgreSQL database
 ```
 
 #### Environment Variables
@@ -166,7 +166,7 @@ The project uses GitHub Actions for automated releases:
    ```bash
    # Using the release script (recommended)
    ./scripts/release.sh 2.0.0
-   
+
    # Or manually create a tag
    git tag -a v2.0.0 -m "Release v2.0.0"
    git push origin v2.0.0
@@ -184,10 +184,10 @@ The project uses GitHub Actions for automated releases:
    pnpm build
    pnpm test
    pnpm test:integration
-   
+
    # Publish to NPM
    pnpm publish --access public
-   
+
    # Build and push Docker image
    ./scripts/docker-push.sh 2.0.0 latest
    ```
@@ -296,37 +296,37 @@ spec:
         app: nuxt-fullstack-mcp
     spec:
       containers:
-      - name: nuxt-fullstack-mcp
-        image: nuxt-fullstack-mcp:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: NODE_ENV
-          value: "production"
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: database-secret
-              key: url
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /__mcp/health
-            port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /__mcp/health
-            port: 3000
-          initialDelaySeconds: 5
-          periodSeconds: 5
+        - name: nuxt-fullstack-mcp
+          image: nuxt-fullstack-mcp:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: url
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 250m
+            limits:
+              memory: 512Mi
+              cpu: 500m
+          livenessProbe:
+            httpGet:
+              path: /__mcp/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /__mcp/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
 ```
 
 #### Docker Swarm

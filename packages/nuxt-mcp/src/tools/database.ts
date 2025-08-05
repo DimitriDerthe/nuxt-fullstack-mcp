@@ -1,8 +1,9 @@
-import type { McpToolContext, DatabaseSchema } from '../types'
+import type { DatabaseSchema, McpToolContext } from '../types'
 import { z } from 'zod'
 
 export function toolsDatabase({ mcp, nuxt, modules }: McpToolContext): void {
-  if (!modules.hasDrizzle) return
+  if (!modules.hasDrizzle)
+    return
 
   mcp.tool(
     'get-database-schema',
@@ -10,7 +11,7 @@ export function toolsDatabase({ mcp, nuxt, modules }: McpToolContext): void {
     {},
     async () => {
       const schema = await getDatabaseSchema(nuxt)
-      
+
       return {
         content: [{
           type: 'text',
@@ -29,7 +30,7 @@ export function toolsDatabase({ mcp, nuxt, modules }: McpToolContext): void {
     {},
     async () => {
       const tables = await getDatabaseTables(nuxt)
-      
+
       return {
         content: [{
           type: 'text',
@@ -50,10 +51,8 @@ export function toolsDatabase({ mcp, nuxt, modules }: McpToolContext): void {
         .describe('Type of database operation'),
       table: z.string()
         .describe('Target table name'),
-      conditions: z.string().optional()
-        .describe('WHERE conditions (optional)'),
-      relations: z.string().optional()
-        .describe('Related tables to join (optional)'),
+      conditions: z.string().optional().describe('WHERE conditions (optional)'),
+      relations: z.string().optional().describe('Related tables to join (optional)'),
     },
     async ({ operation, table, conditions, relations }) => {
       const query = generateDrizzleQuery({
@@ -83,10 +82,8 @@ export function toolsDatabase({ mcp, nuxt, modules }: McpToolContext): void {
         .describe('Database table name'),
       operations: z.array(z.enum(['create', 'read', 'update', 'delete', 'list']))
         .describe('CRUD operations to generate'),
-      withAuth: z.boolean().optional()
-        .describe('Include authentication checks'),
-      withValidation: z.boolean().optional()
-        .describe('Include input validation'),
+      withAuth: z.boolean().optional().describe('Include authentication checks'),
+      withValidation: z.boolean().optional().describe('Include input validation'),
     },
     async ({ table, operations, withAuth = false, withValidation = true }) => {
       const apiRoutes = generateDatabaseAPIRoutes({
@@ -146,7 +143,7 @@ export function toolsDatabase({ mcp, nuxt, modules }: McpToolContext): void {
     {},
     async () => {
       const connectionInfo = await getDatabaseConnection(nuxt)
-      
+
       return {
         content: [{
           type: 'text',
@@ -240,7 +237,7 @@ const complex = await db.select()
   .limit(10)
   .offset(0)
   .orderBy(${table}.createdAt)`,
-      
+
       relational: `import { db } from '~/lib/db'
 
 // Relational query (preferred for complex relations)
@@ -271,7 +268,7 @@ const selective = await db.query.${table}.findMany({
       }
     }
   }
-})`
+})`,
     },
 
     insert: {
@@ -288,7 +285,7 @@ const result = await db.insert(${table})
   .returning()
 
 const insertedRecord = result[0]`,
-      
+
       multiple: `import { db } from '~/lib/db'
 import { ${table} } from '~/lib/schema'
 
@@ -306,7 +303,7 @@ const upsert = await db.insert(${table})
   .onConflictDoUpdate({
     target: ${table}.id,
     set: { name: sql\`excluded.name\` }
-  })`
+  })`,
     },
 
     update: {
@@ -332,7 +329,7 @@ const conditional = await db.update(${table})
       lt(${table}.lastLogin, new Date('2023-01-01'))
     )
   )`,
-      
+
       increment: `import { sql } from 'drizzle-orm'
 
 // Increment/decrement values
@@ -341,7 +338,7 @@ const result = await db.update(${table})
     viewCount: sql\`\${${table}.viewCount} + 1\`,
     updatedAt: new Date()
   })
-  .where(eq(${table}.id, postId))`
+  .where(eq(${table}.id, postId))`,
     },
 
     delete: {
@@ -365,7 +362,7 @@ const conditionalDelete = await db.delete(${table})
       eq(${table}.active, false),
       lt(${table}.lastLogin, new Date('2023-01-01'))
     )
-  )`
+  )`,
     },
 
     transactions: `import { db } from '~/lib/db'
@@ -391,16 +388,16 @@ const result = await db.transaction(async (tx) => {
     .returning()
 
   return { user, post }
-})`
+})`,
   }
 
   switch (operation) {
     case 'select':
-      return queries.select.basic + '\n\n' + queries.select.relational
+      return `${queries.select.basic}\n\n${queries.select.relational}`
     case 'insert':
-      return queries.insert.single + '\n\n' + queries.insert.multiple
+      return `${queries.insert.single}\n\n${queries.insert.multiple}`
     case 'update':
-      return queries.update.basic + '\n\n' + queries.update.increment
+      return `${queries.update.basic}\n\n${queries.update.increment}`
     case 'delete':
       return queries.delete.basic
     case 'transaction':
@@ -423,7 +420,8 @@ function generateDatabaseAPIRoutes({
 }): Record<string, string> {
   const routes: Record<string, string> = {}
 
-  const authCheck = withAuth ? `
+  const authCheck = withAuth
+    ? `
   // Check authentication
   const session = await getUserSession(event)
   if (!session.user) {
@@ -432,7 +430,8 @@ function generateDatabaseAPIRoutes({
       statusMessage: 'Unauthorized'
     })
   }
-` : ''
+`
+    : ''
 
   const validationImport = withValidation ? `import { z } from 'zod'` : ''
 
@@ -494,7 +493,8 @@ export default defineEventHandler(async (event) => {${authCheck}
   }
 
   if (operations.includes('create')) {
-    const validation = withValidation ? `
+    const validation = withValidation
+      ? `
   // Validation schema
   const schema = z.object({
     // Add your validation rules here
@@ -502,7 +502,8 @@ export default defineEventHandler(async (event) => {${authCheck}
   })
 
   const validatedData = schema.parse(body)
-` : '  const validatedData = body'
+`
+      : '  const validatedData = body'
 
     routes[`${table}/index.post.ts`] = `${validationImport}
 import { db } from '~/lib/db'
@@ -528,7 +529,8 @@ ${validation}
   }
 
   if (operations.includes('update')) {
-    const validation = withValidation ? `
+    const validation = withValidation
+      ? `
   // Validation schema
   const schema = z.object({
     // Add your validation rules here
@@ -536,7 +538,8 @@ ${validation}
   })
 
   const validatedData = schema.parse(body)
-` : '  const validatedData = body'
+`
+      : '  const validatedData = body'
 
     routes[`${table}/[id].patch.ts`] = `${validationImport}
 import { db } from '~/lib/db'
@@ -644,7 +647,7 @@ export const ${tableName} = sqliteTable('${tableName}', {
   createdAt: text('created_at').default(sql\`CURRENT_TIMESTAMP\`),
   updatedAt: text('updated_at').default(sql\`CURRENT_TIMESTAMP\`),
   // Add your columns here based on: ${details}
-})`
+})`,
       }
 
     case 'add-column':
@@ -652,21 +655,21 @@ export const ${tableName} = sqliteTable('${tableName}', {
         migration: `-- Add column to ${tableName}
 ALTER TABLE "${tableName}" ADD COLUMN "${details}" TEXT;`,
         schema: `// Add to your ${tableName} schema:
-// ${details}: text('${details}'),`
+// ${details}: text('${details}'),`,
       }
 
     case 'drop-table':
       return {
         migration: `-- Drop ${tableName} table
 DROP TABLE "${tableName}";`,
-        schema: `// Remove the ${tableName} export from your schema file`
+        schema: `// Remove the ${tableName} export from your schema file`,
       }
 
     default:
       return {
         migration: `-- ${changeType} for ${tableName}
 -- Details: ${details}`,
-        schema: `// Update your schema for ${changeType}`
+        schema: `// Update your schema for ${changeType}`,
       }
   }
 }

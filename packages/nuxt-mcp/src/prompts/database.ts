@@ -1,7 +1,8 @@
 import type { McpToolContext } from '../types'
 
 export function promptDatabase({ mcp, modules }: McpToolContext): void {
-  if (!modules.hasDrizzle) return
+  if (!modules.hasDrizzle)
+    return
 
   mcp.prompt('drizzle-patterns', () => {
     const lines: string[] = []

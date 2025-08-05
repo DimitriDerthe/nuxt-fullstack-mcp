@@ -19,9 +19,9 @@ The CI/CD pipeline consists of three main workflows:
 ```yaml
 on:
   push:
-    branches: [main, master, develop]  # Push to main branches
+    branches: [main, master, develop] # Push to main branches
   pull_request:
-    branches: [main, master]           # PRs to main branches
+    branches: [main, master] # PRs to main branches
 ```
 
 ### Workflow Jobs
@@ -49,7 +49,7 @@ on:
 ```bash
 # Push to Docker Hub ONLY if:
 - Tests pass AND
-- Event is push (not PR) AND  
+- Event is push (not PR) AND
 - Branch is main or master
 ```
 
@@ -73,8 +73,8 @@ on:
 
 ```yaml
 env:
-  REGISTRY: docker.io                    # Docker registry
-  IMAGE_NAME: nuxt-fullstack-mcp         # Image name
+  REGISTRY: docker.io # Docker registry
+  IMAGE_NAME: nuxt-fullstack-mcp # Image name
 ```
 
 ## 🚀 Release Management Workflow
@@ -86,10 +86,10 @@ env:
 ```yaml
 on:
   push:
-    tags: ['v*']           # Git tags starting with 'v'
-  workflow_dispatch:       # Manual trigger
+    tags: ['v*'] # Git tags starting with 'v'
+  workflow_dispatch: # Manual trigger
     inputs:
-      version: string      # Version to release
+      version: string # Version to release
 ```
 
 ### Workflow Jobs
@@ -142,7 +142,7 @@ Same comprehensive testing as Docker workflow
 **Features**:
 - ✅ Semantic version validation
 - ✅ Git branch and status checks
-- ✅ Complete test suite execution  
+- ✅ Complete test suite execution
 - ✅ Automatic version updates
 - ✅ CHANGELOG.md updates
 - ✅ Git tag creation and pushing
@@ -264,7 +264,7 @@ GitHub Actions → Failed workflow → Test job → View logs
 # Run tests locally
 pnpm install
 pnpm lint
-pnpm typecheck  
+pnpm typecheck
 pnpm test
 pnpm test:integration
 ```
@@ -322,7 +322,7 @@ curl -H "Authorization: token $GITHUB_TOKEN" \
 
 ### Performance Improvements
 - ✅ Dependency caching for faster builds
-- ✅ Docker layer caching for image builds  
+- ✅ Docker layer caching for image builds
 - ✅ Parallel job execution where possible
 - ✅ Conditional execution to skip unnecessary steps
 

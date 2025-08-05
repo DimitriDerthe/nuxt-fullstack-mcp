@@ -1,7 +1,8 @@
 import type { McpToolContext } from '../types'
 
 export function promptNuxtAuth({ mcp, modules }: McpToolContext): void {
-  if (!modules.hasNuxtAuth) return
+  if (!modules.hasNuxtAuth)
+    return
 
   mcp.prompt('nuxt-auth-complete', () => {
     const lines: string[] = []

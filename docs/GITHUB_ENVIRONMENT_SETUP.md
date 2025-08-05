@@ -67,9 +67,9 @@ Value: dckr_pat_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 **Permissions needed** (set in repository settings):
 ```yaml
-contents: write    # Create releases and tags
-packages: write    # Publish to GitHub packages (if needed)
-id-token: write    # For provenance
+contents: write # Create releases and tags
+packages: write # Publish to GitHub packages (if needed)
+id-token: write # For provenance
 ```
 
 ## 🏗️ GitHub Repository Configuration
@@ -269,7 +269,7 @@ npm view nuxt-mcp
 
 ---
 
-**Need Help?** 
+**Need Help?**
 - Check [GitHub Actions documentation](https://docs.github.com/en/actions)
 - Review [Docker Hub documentation](https://docs.docker.com/docker-hub/)
 - Consult [NPM documentation](https://docs.npmjs.com/)

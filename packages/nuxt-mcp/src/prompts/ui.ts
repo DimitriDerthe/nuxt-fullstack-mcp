@@ -1,7 +1,8 @@
 import type { McpToolContext } from '../types'
 
 export function promptNuxtUI({ mcp, modules }: McpToolContext): void {
-  if (!modules.hasNuxtUI) return
+  if (!modules.hasNuxtUI)
+    return
 
   mcp.prompt('nuxt-ui-patterns', () => {
     const lines: string[] = []

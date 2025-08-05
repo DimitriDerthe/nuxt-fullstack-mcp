@@ -4,21 +4,21 @@ import type { ViteMcpOptions } from 'vite-plugin-mcp'
 import type { McpToolContext } from './types'
 import { addVitePlugin, defineNuxtModule } from '@nuxt/kit'
 import { ViteMcp } from 'vite-plugin-mcp'
-import { promptNuxtBasic } from './prompts/basic'
-import { promptNuxtUI } from './prompts/ui'
-import { promptNuxtAuth } from './prompts/auth'
-import { promptDatabase } from './prompts/database'
-import { promptFullstack } from './prompts/fullstack'
-import { promptDesignExpert } from './prompts/design-expert'
 import { promptAccessibilityExpert } from './prompts/accessibility-expert'
+import { promptNuxtAuth } from './prompts/auth'
+import { promptNuxtBasic } from './prompts/basic'
+import { promptDatabase } from './prompts/database'
+import { promptDesignExpert } from './prompts/design-expert'
+import { promptFullstack } from './prompts/fullstack'
+import { promptNuxtUI } from './prompts/ui'
+import { toolsAccessibility } from './tools/accessibility'
+import { toolsNuxtAuth } from './tools/auth'
+import { toolsDatabase } from './tools/database'
+import { toolsDesignSystem } from './tools/design-system'
 import { toolsNuxtRuntime } from './tools/runtime'
 import { toolsScaffold } from './tools/scaffold'
 import { toolsNuxtUI } from './tools/ui'
-import { toolsNuxtAuth } from './tools/auth'
-import { toolsDatabase } from './tools/database'
 import { toolsUIUXDesign } from './tools/uiux-design'
-import { toolsAccessibility } from './tools/accessibility'
-import { toolsDesignSystem } from './tools/design-system'
 
 export interface ModuleOptions extends ViteMcpOptions {
   /**
@@ -77,9 +77,9 @@ export default defineNuxtModule<ModuleOptions>({
         const modules = {
           hasNuxtUI: installedModules.includes('@nuxt/ui'),
           hasNuxtAuth: installedModules.includes('nuxt-auth-utils'),
-          hasDrizzle: installedModules.some(m => m.includes('drizzle')) || 
-                      Object.keys(nuxt.options.runtimeConfig.public || {}).some(k => k.includes('database')) ||
-                      Object.keys(process.env).some(k => k.includes('DATABASE')),
+          hasDrizzle: installedModules.some(m => m.includes('drizzle'))
+            || Object.keys(nuxt.options.runtimeConfig.public || {}).some(k => k.includes('database'))
+            || Object.keys(process.env).some(k => k.includes('DATABASE')),
           hasUIUXNeeds: true, // UI/UX expertise is always available for any project
         }
 
@@ -102,15 +102,15 @@ export default defineNuxtModule<ModuleOptions>({
         promptNuxtAuth(context)
         promptDatabase(context)
         promptFullstack(context)
-        
+
         // UI/UX expert prompts (always available)
         promptDesignExpert(context)
         promptAccessibilityExpert(context)
-        
+
         toolsNuxtUI(context)
         toolsNuxtAuth(context)
         toolsDatabase(context)
-        
+
         // UI/UX design tools (always available)
         toolsUIUXDesign(context)
         toolsAccessibility(context)

@@ -10,7 +10,7 @@ const mockContext: McpToolContext = {
     },
     prompt: (name: string, handler: any) => {
       console.log(`✓ Prompt registered: ${name}`)
-    }
+    },
   } as any,
   vite: {} as any,
   nitro: Promise.resolve({} as any),
@@ -19,8 +19,8 @@ const mockContext: McpToolContext = {
     hasNuxtUI: true,
     hasNuxtAuth: true,
     hasDrizzle: true,
-    hasUIUXNeeds: true
-  }
+    hasUIUXNeeds: true,
+  },
 }
 
 // Test des imports et de l'initialisation
@@ -88,8 +88,8 @@ async function testIntegration() {
     console.log('- ✓ Expert design & accessibility prompts')
     console.log('- ✓ Comprehensive documentation prompts')
     console.log('- ✓ Real examples from official docs')
-
-  } catch (error) {
+  }
+  catch (error) {
     console.error('❌ Integration test failed:', error)
     throw error
   }
@@ -98,15 +98,15 @@ async function testIntegration() {
 // Test avec modules désactivés
 async function testWithoutModules() {
   console.log('\n🔄 Testing with modules disabled...')
-  
+
   const contextWithoutModules: McpToolContext = {
     ...mockContext,
     modules: {
       hasNuxtUI: false,
       hasNuxtAuth: false,
       hasDrizzle: false,
-      hasUIUXNeeds: false
-    }
+      hasUIUXNeeds: false,
+    },
   }
 
   const { toolsNuxtUI } = await import('./src/tools/ui')

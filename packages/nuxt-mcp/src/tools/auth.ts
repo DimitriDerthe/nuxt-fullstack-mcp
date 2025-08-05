@@ -1,8 +1,9 @@
-import type { McpToolContext, AuthConfig } from '../types'
+import type { AuthConfig, McpToolContext } from '../types'
 import { z } from 'zod'
 
 export function toolsNuxtAuth({ mcp, nuxt, modules }: McpToolContext): void {
-  if (!modules.hasNuxtAuth) return
+  if (!modules.hasNuxtAuth)
+    return
 
   mcp.tool(
     'get-auth-config',
@@ -10,7 +11,7 @@ export function toolsNuxtAuth({ mcp, nuxt, modules }: McpToolContext): void {
     {},
     async () => {
       const authConfig = await getAuthConfiguration(nuxt)
-      
+
       return {
         content: [{
           type: 'text',
@@ -29,7 +30,7 @@ export function toolsNuxtAuth({ mcp, nuxt, modules }: McpToolContext): void {
     {},
     async () => {
       const sessionInfo = await getSessionInfo(nuxt)
-      
+
       return {
         content: [{
           type: 'text',
@@ -57,7 +58,7 @@ export function toolsNuxtAuth({ mcp, nuxt, modules }: McpToolContext): void {
     {},
     async () => {
       const providers = await getAuthProviders(nuxt)
-      
+
       return {
         content: [{
           type: 'text',
@@ -76,10 +77,8 @@ export function toolsNuxtAuth({ mcp, nuxt, modules }: McpToolContext): void {
     {
       pageType: z.enum(['login', 'register', 'profile', 'settings', 'forgot-password'])
         .describe('Type of auth page to generate'),
-      withUI: z.boolean().optional()
-        .describe('Use Nuxt UI components'),
-      withProviders: z.boolean().optional()
-        .describe('Include OAuth provider buttons'),
+      withUI: z.boolean().optional().describe('Use Nuxt UI components'),
+      withProviders: z.boolean().optional().describe('Include OAuth provider buttons'),
     },
     async ({ pageType, withUI = true, withProviders = true }) => {
       const template = generateAuthPageTemplate({
@@ -108,8 +107,7 @@ export function toolsNuxtAuth({ mcp, nuxt, modules }: McpToolContext): void {
     {
       middlewareType: z.enum(['auth', 'guest', 'admin', 'role-based'])
         .describe('Type of middleware to generate'),
-      redirectTo: z.string().optional()
-        .describe('Redirect path for unauthorized users'),
+      redirectTo: z.string().optional().describe('Redirect path for unauthorized users'),
     },
     async ({ middlewareType, redirectTo }) => {
       const middleware = generateAuthMiddleware(middlewareType, redirectTo)
@@ -133,8 +131,7 @@ export function toolsNuxtAuth({ mcp, nuxt, modules }: McpToolContext): void {
     {
       routeType: z.enum(['login', 'logout', 'register', 'profile', 'oauth-callback'])
         .describe('Type of auth API route to generate'),
-      provider: z.string().optional()
-        .describe('OAuth provider name (for oauth-callback)'),
+      provider: z.string().optional().describe('OAuth provider name (for oauth-callback)'),
     },
     async ({ routeType, provider }) => {
       const apiRoute = generateAuthAPIRoute(routeType, provider)
@@ -156,10 +153,30 @@ export function toolsNuxtAuth({ mcp, nuxt, modules }: McpToolContext): void {
 async function getAuthConfiguration(_nuxt: any): Promise<AuthConfig> {
   return {
     providers: [
-      'Auth0', 'AWS Cognito', 'Azure', 'Battledotnet', 'Discord', 'Facebook',
-      'GitHub', 'GitLab', 'Google', 'Instagram', 'Keycloak', 'LinkedIn',
-      'Microsoft', 'Okta', 'Paypal', 'Spotify', 'Steam', 'Stripe', 'Twitch',
-      'Twitter', 'Vk', 'WorkOS', 'Yandex', 'Zoom'
+      'Auth0',
+      'AWS Cognito',
+      'Azure',
+      'Battledotnet',
+      'Discord',
+      'Facebook',
+      'GitHub',
+      'GitLab',
+      'Google',
+      'Instagram',
+      'Keycloak',
+      'LinkedIn',
+      'Microsoft',
+      'Okta',
+      'Paypal',
+      'Spotify',
+      'Steam',
+      'Stripe',
+      'Twitch',
+      'Twitter',
+      'Vk',
+      'WorkOS',
+      'Yandex',
+      'Zoom',
     ],
     session: {
       name: 'nuxt-session',
@@ -168,14 +185,14 @@ async function getAuthConfiguration(_nuxt: any): Promise<AuthConfig> {
         httpOnly: true,
         secure: true,
         sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7 // 7 days
-      }
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+      },
     },
     pages: {
       login: '/auth/login',
       register: '/auth/register',
-      error: '/auth/error'
-    }
+      error: '/auth/error',
+    },
   }
 }
 
@@ -191,16 +208,16 @@ async function getSessionInfo(_nuxt: any): Promise<any> {
           avatar: { type: 'string', required: false, description: 'Avatar image URL' },
           roles: { type: 'string[]', required: false, description: 'User roles/permissions' },
           // Custom fields can be added based on provider
-        }
+        },
       },
       session: {
         description: 'Session metadata',
         properties: {
           createdAt: { type: 'Date', description: 'Session creation time' },
           updatedAt: { type: 'Date', description: 'Last session update' },
-          expiresAt: { type: 'Date', description: 'Session expiration' }
-        }
-      }
+          expiresAt: { type: 'Date', description: 'Session expiration' },
+        },
+      },
     },
     clientSide: {
       useUserSession: {
@@ -216,8 +233,8 @@ if (loggedIn.value) {
 await clear()
 
 // Refresh session
-await fetch()`
-      }
+await fetch()`,
+      },
     },
     serverSide: {
       examples: [
@@ -233,7 +250,7 @@ export default defineEventHandler(async (event) => {
     })
   }
   return { user: session.user }
-})`
+})`,
         },
         {
           title: 'Set Session After Login',
@@ -254,7 +271,7 @@ export default defineEventHandler(async (event) => {
   })
   
   return { success: true }
-})`
+})`,
         },
         {
           title: 'Require Authentication',
@@ -267,17 +284,17 @@ export default defineEventHandler(async (event) => {
     message: 'Protected data',
     user: session.user
   }
-})`
-        }
-      ]
+})`,
+        },
+      ],
     },
     security: {
       encryption: 'Sessions encrypted using iron (sealed cookies)',
       httpOnly: 'Cookies are HTTP-only by default',
       secure: 'HTTPS required in production',
       sameSite: 'CSRF protection via SameSite cookies',
-      maxAge: 'Configurable session expiration'
-    }
+      maxAge: 'Configurable session expiration',
+    },
   }
 }
 
@@ -302,7 +319,7 @@ export default defineOAuthGitHubEventHandler({
     })
     return sendRedirect(event, '/')
   }
-})`
+})`,
       },
       google: {
         name: 'Google',
@@ -325,7 +342,7 @@ export default defineOAuthGoogleEventHandler({
     })
     return sendRedirect(event, '/')
   }
-})`
+})`,
       },
       discord: {
         name: 'Discord',
@@ -349,14 +366,34 @@ export default defineOAuthGoogleEventHandler({
     })
     return sendRedirect(event, '/')
   }
-})`
-      }
+})`,
+      },
     },
     allProviders: [
-      'Auth0', 'AWS Cognito', 'Azure', 'Battledotnet', 'Discord', 'Facebook',
-      'GitHub', 'GitLab', 'Google', 'Instagram', 'Keycloak', 'LinkedIn',
-      'Microsoft', 'Okta', 'Paypal', 'Spotify', 'Steam', 'Stripe', 'Twitch',
-      'Twitter', 'Vk', 'WorkOS', 'Yandex', 'Zoom'
+      'Auth0',
+      'AWS Cognito',
+      'Azure',
+      'Battledotnet',
+      'Discord',
+      'Facebook',
+      'GitHub',
+      'GitLab',
+      'Google',
+      'Instagram',
+      'Keycloak',
+      'LinkedIn',
+      'Microsoft',
+      'Okta',
+      'Paypal',
+      'Spotify',
+      'Steam',
+      'Stripe',
+      'Twitch',
+      'Twitter',
+      'Vk',
+      'WorkOS',
+      'Yandex',
+      'Zoom',
     ],
     customProvider: {
       pattern: 'defineOAuth<Provider>EventHandler',
@@ -373,7 +410,7 @@ export default defineOAuthCustomEventHandler({
     await setUserSession(event, { user })
     return sendRedirect(event, '/')
   }
-})`
+})`,
     },
     clientRedirect: {
       description: 'Client-side OAuth redirect',
@@ -389,8 +426,8 @@ const { loggedIn } = useUserSession()
 function login() {
   return navigateTo('/api/auth/github')
 }
-</script>`
-    }
+</script>`,
+    },
   }
 }
 
@@ -409,7 +446,7 @@ function generateAuthPageTemplate({
   switch (pageType) {
     case 'login':
       return `<script setup lang="ts">
-${uiComponents ? "import { z } from 'zod'" : ''}
+${uiComponents ? 'import { z } from \'zod\'' : ''}
 
 definePageMeta({
   middleware: 'guest'
@@ -424,7 +461,8 @@ watch(loggedIn, (value) => {
   }
 })
 
-${uiComponents ? `
+${uiComponents
+  ? `
 const schema = z.object({
   email: z.string().email('Invalid email'),
   password: z.string().min(6, 'Password must be at least 6 characters')
@@ -436,7 +474,8 @@ const state = reactive({
 })
 
 const { pending } = await useLazyAsyncData('login', () => Promise.resolve())
-` : `
+`
+  : `
 const form = reactive({
   email: '',
   password: '',
@@ -459,11 +498,13 @@ async function onSubmit() {
   }
 }
 
-${providerButtons ? `
+${providerButtons
+  ? `
 async function loginWithProvider(provider: string) {
   await navigateTo(\`/api/auth/\${provider}\`)
 }
-` : ''}
+`
+  : ''}
 </script>
 
 <template>
@@ -473,7 +514,8 @@ async function loginWithProvider(provider: string) {
         <h2 class="text-3xl font-bold">Sign in to your account</h2>
       </div>
       
-      ${uiComponents ? `
+      ${uiComponents
+        ? `
       <UForm :schema="schema" :state="state" @submit="onSubmit" class="space-y-6">
         <UFormField label="Email" name="email">
           <UInput v-model="state.email" type="email" placeholder="Enter your email" />
@@ -487,7 +529,8 @@ async function loginWithProvider(provider: string) {
           Sign in
         </UButton>
       </UForm>
-      ` : `
+      `
+        : `
       <form @submit.prevent="onSubmit" class="space-y-6">
         <div>
           <label for="email" class="block text-sm font-medium">Email</label>
@@ -519,7 +562,8 @@ async function loginWithProvider(provider: string) {
       </form>
       `}
       
-      ${providerButtons ? `
+      ${providerButtons
+        ? `
       <div class="space-y-3">
         <div class="relative">
           <div class="absolute inset-0 flex items-center">
@@ -530,7 +574,8 @@ async function loginWithProvider(provider: string) {
           </div>
         </div>
         
-        ${uiComponents ? `
+        ${uiComponents
+          ? `
         <UButton @click="loginWithProvider('github')" variant="outline" block>
           <Icon name="mdi:github" class="w-5 h-5 mr-2" />
           GitHub
@@ -540,7 +585,8 @@ async function loginWithProvider(provider: string) {
           <Icon name="mdi:google" class="w-5 h-5 mr-2" />
           Google
         </UButton>
-        ` : `
+        `
+          : `
         <button @click="loginWithProvider('github')" class="w-full border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-50">
           GitHub
         </button>
@@ -550,7 +596,8 @@ async function loginWithProvider(provider: string) {
         </button>
         `}
       </div>
-      ` : ''}
+      `
+        : ''}
       
       <div class="text-center">
         <NuxtLink to="/auth/register" class="text-blue-600 hover:text-blue-500">
@@ -569,7 +616,8 @@ definePageMeta({
 
 const { user, clear } = useUserSession()
 
-${uiComponents ? `
+${uiComponents
+  ? `
 const state = reactive({
   name: user.value?.name || '',
   email: user.value?.email || '',
@@ -579,7 +627,8 @@ const schema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email'),
 })
-` : `
+`
+  : `
 const form = reactive({
   name: user.value?.name || '',
   email: user.value?.email || '',
@@ -612,18 +661,21 @@ async function logout() {
   <div class="max-w-2xl mx-auto p-6">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold">Profile Settings</h1>
-      ${uiComponents ? `
+      ${uiComponents
+        ? `
       <UButton @click="logout" color="red" variant="outline">
         Logout
       </UButton>
-      ` : `
+      `
+        : `
       <button @click="logout" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
         Logout
       </button>
       `}
     </div>
     
-    ${uiComponents ? `
+    ${uiComponents
+      ? `
     <UForm :schema="schema" :state="state" @submit="updateProfile" class="space-y-6">
       <UFormField label="Name" name="name">
         <UInput v-model="state.name" placeholder="Your name" />
@@ -637,7 +689,8 @@ async function logout() {
         Update Profile
       </UButton>
     </UForm>
-    ` : `
+    `
+      : `
     <form @submit.prevent="updateProfile" class="space-y-6">
       <div>
         <label class="block text-sm font-medium mb-1">Name</label>

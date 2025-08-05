@@ -2,7 +2,8 @@ import type { McpToolContext, NuxtUITheme } from '../types'
 import { z } from 'zod'
 
 export function toolsNuxtUI({ mcp, nuxt, modules }: McpToolContext): void {
-  if (!modules.hasNuxtUI) return
+  if (!modules.hasNuxtUI)
+    return
 
   mcp.tool(
     'list-nuxt-ui-components',
@@ -11,7 +12,7 @@ export function toolsNuxtUI({ mcp, nuxt, modules }: McpToolContext): void {
     async () => {
       // Get Nuxt UI components from the app config or module options
       const uiComponents = await getUIComponents(nuxt)
-      
+
       return {
         content: [{
           type: 'text',
@@ -30,7 +31,7 @@ export function toolsNuxtUI({ mcp, nuxt, modules }: McpToolContext): void {
     {},
     async () => {
       const theme = await getUITheme(nuxt)
-      
+
       return {
         content: [{
           type: 'text',
@@ -51,10 +52,8 @@ export function toolsNuxtUI({ mcp, nuxt, modules }: McpToolContext): void {
         .describe('Type of component to scaffold'),
       name: z.string()
         .describe('Component name (PascalCase)'),
-      withProps: z.boolean().optional()
-        .describe('Include TypeScript props interface'),
-      withVariants: z.boolean().optional()
-        .describe('Include component variants'),
+      withProps: z.boolean().optional().describe('Include TypeScript props interface'),
+      withVariants: z.boolean().optional().describe('Include component variants'),
     },
     async ({ componentType, name, withProps = true, withVariants = false }) => {
       const template = generateUIComponentTemplate({
@@ -83,7 +82,7 @@ export function toolsNuxtUI({ mcp, nuxt, modules }: McpToolContext): void {
     {},
     async () => {
       const colors = await getUIColors(nuxt)
-      
+
       return {
         content: [{
           type: 'text',
@@ -101,12 +100,12 @@ export function toolsNuxtUI({ mcp, nuxt, modules }: McpToolContext): void {
   )
 }
 
-async function getUIComponents(_nuxt: any): Promise<Array<{ 
-  name: string, 
-  props: Record<string, any>, 
-  description: string,
-  examples: Array<{ title: string, code: string }>,
-  variants?: Record<string, string[]>,
+async function getUIComponents(_nuxt: any): Promise<Array<{
+  name: string
+  props: Record<string, any>
+  description: string
+  examples: Array<{ title: string, code: string }>
+  variants?: Record<string, string[]>
   documentation: string
 }>> {
   return [
@@ -123,31 +122,31 @@ async function getUIComponents(_nuxt: any): Promise<Array<{
         disabled: { type: 'boolean', default: false, description: 'Disable button interaction' },
         label: { type: 'string', description: 'Button text content' },
         to: { type: 'string', description: 'Router link destination' },
-        href: { type: 'string', description: 'External link URL' }
+        href: { type: 'string', description: 'External link URL' },
       },
       variants: {
         color: ['primary', 'secondary', 'success', 'warning', 'error'],
         variant: ['solid', 'outline', 'soft', 'ghost', 'link'],
-        size: ['xs', 'sm', 'md', 'lg', 'xl']
+        size: ['xs', 'sm', 'md', 'lg', 'xl'],
       },
       examples: [
         {
           title: 'Basic Button',
-          code: `<UButton label="Click me" />`
+          code: `<UButton label="Click me" />`,
         },
         {
           title: 'Button with Icon',
-          code: `<UButton label="Save" icon="i-lucide-save" color="primary" />`
+          code: `<UButton label="Save" icon="i-lucide-save" color="primary" />`,
         },
         {
           title: 'Loading Button',
-          code: `<UButton label="Loading..." loading />`
+          code: `<UButton label="Loading..." loading />`,
         },
         {
           title: 'Link Button',
-          code: `<UButton label="Go to Dashboard" to="/dashboard" variant="outline" />`
-        }
-      ]
+          code: `<UButton label="Go to Dashboard" to="/dashboard" variant="outline" />`,
+        },
+      ],
     },
     {
       name: 'UInput',
@@ -162,26 +161,26 @@ async function getUIComponents(_nuxt: any): Promise<Array<{
         size: { type: 'string', default: 'md', description: 'Input size' },
         icon: { type: 'string', description: 'Leading or trailing icon' },
         disabled: { type: 'boolean', default: false, description: 'Disable input' },
-        required: { type: 'boolean', default: false, description: 'Mark as required' }
+        required: { type: 'boolean', default: false, description: 'Mark as required' },
       },
       variants: {
         variant: ['outline', 'none'],
-        size: ['xs', 'sm', 'md', 'lg', 'xl']
+        size: ['xs', 'sm', 'md', 'lg', 'xl'],
       },
       examples: [
         {
           title: 'Basic Input',
-          code: `<UInput v-model="value" placeholder="Enter text..." />`
+          code: `<UInput v-model="value" placeholder="Enter text..." />`,
         },
         {
           title: 'Search Input',
-          code: `<UInput v-model="search" placeholder="Search..." icon="i-lucide-search" />`
+          code: `<UInput v-model="search" placeholder="Search..." icon="i-lucide-search" />`,
         },
         {
           title: 'Password Input',
-          code: `<UInput v-model="password" type="password" placeholder="Password" />`
-        }
-      ]
+          code: `<UInput v-model="password" type="password" placeholder="Password" />`,
+        },
+      ],
     },
     {
       name: 'UForm',
@@ -191,7 +190,7 @@ async function getUIComponents(_nuxt: any): Promise<Array<{
         state: { type: 'object', required: true, description: 'Reactive form state object' },
         schema: { type: 'object', description: 'Validation schema' },
         validate: { type: 'function', description: 'Custom validation function' },
-        validateOn: { type: 'array', default: ['blur', 'change', 'input'], description: 'Validation trigger events' }
+        validateOn: { type: 'array', default: ['blur', 'change', 'input'], description: 'Validation trigger events' },
       },
       examples: [
         {
@@ -226,9 +225,9 @@ function onSubmit() {
     
     <UButton type="submit">Submit</UButton>
   </UForm>
-</template>`
-        }
-      ]
+</template>`,
+        },
+      ],
     },
     {
       name: 'UFormField',
@@ -239,23 +238,23 @@ function onSubmit() {
         name: { type: 'string', required: true, description: 'Field name for validation' },
         description: { type: 'string', description: 'Help text' },
         required: { type: 'boolean', default: false, description: 'Mark field as required' },
-        error: { type: 'string', description: 'Error message' }
+        error: { type: 'string', description: 'Error message' },
       },
       examples: [
         {
           title: 'Basic Form Field',
           code: `<UFormField label="Email" name="email" description="We'll never share your email">
   <UInput v-model="state.email" type="email" />
-</UFormField>`
-        }
-      ]
+</UFormField>`,
+        },
+      ],
     },
     {
       name: 'UCard',
       description: 'Card container component for content organization',
       documentation: 'https://ui.nuxt.com/components/card',
       props: {
-        ui: { type: 'object', description: 'Custom UI configuration' }
+        ui: { type: 'object', description: 'Custom UI configuration' },
       },
       examples: [
         {
@@ -272,10 +271,10 @@ function onSubmit() {
       <UButton>Action</UButton>
     </div>
   </template>
-</UCard>`
-        }
-      ]
-    }
+</UCard>`,
+        },
+      ],
+    },
   ]
 }
 
@@ -293,7 +292,7 @@ async function getUITheme(_nuxt: any): Promise<NuxtUITheme> {
         700: '#15803d',
         800: '#166534',
         900: '#14532d',
-        950: '#052e16'
+        950: '#052e16',
       },
       gray: {
         50: '#f9fafb',
@@ -306,14 +305,14 @@ async function getUITheme(_nuxt: any): Promise<NuxtUITheme> {
         700: '#374151',
         800: '#1f2937',
         900: '#111827',
-        950: '#030712'
+        950: '#030712',
       },
       semantic: {
         red: 'Error states and destructive actions',
         green: 'Success states and positive actions',
         blue: 'Info states and neutral actions',
-        yellow: 'Warning states and caution'
-      }
+        yellow: 'Warning states and caution',
+      },
     },
     components: {
       button: {
@@ -322,57 +321,57 @@ async function getUITheme(_nuxt: any): Promise<NuxtUITheme> {
           outline: 'Transparent background with colored border',
           soft: 'Subtle colored background',
           ghost: 'Transparent background, colored on hover',
-          link: 'No background, underlined text'
+          link: 'No background, underlined text',
         },
         sizes: {
           xs: 'Extra small - 24px height',
           sm: 'Small - 32px height',
           md: 'Medium - 40px height (default)',
           lg: 'Large - 48px height',
-          xl: 'Extra large - 56px height'
-        }
+          xl: 'Extra large - 56px height',
+        },
       },
       input: {
         variants: {
           outline: 'Border with transparent background',
-          none: 'No styling applied'
+          none: 'No styling applied',
         },
         sizes: {
           xs: '28px height',
           sm: '32px height',
           md: '40px height (default)',
           lg: '48px height',
-          xl: '56px height'
-        }
-      }
+          xl: '56px height',
+        },
+      },
     },
     tokens: {
       borderRadius: {
-        none: '0px',
-        sm: '0.125rem',
-        DEFAULT: '0.25rem',
-        md: '0.375rem',
-        lg: '0.5rem',
-        xl: '0.75rem',
+        'none': '0px',
+        'sm': '0.125rem',
+        'DEFAULT': '0.25rem',
+        'md': '0.375rem',
+        'lg': '0.5rem',
+        'xl': '0.75rem',
         '2xl': '1rem',
         '3xl': '1.5rem',
-        full: '9999px'
+        'full': '9999px',
       },
       spacing: {
         xs: '0.5rem',
         sm: '0.75rem',
         md: '1rem',
         lg: '1.25rem',
-        xl: '1.5rem'
+        xl: '1.5rem',
       },
       fontSize: {
         xs: '0.75rem',
         sm: '0.875rem',
         base: '1rem',
         lg: '1.125rem',
-        xl: '1.25rem'
-      }
-    }
+        xl: '1.25rem',
+      },
+    },
   }
 }
 
@@ -395,14 +394,14 @@ async function getUIColors(_nuxt: any): Promise<Record<string, any>> {
       purple: { description: 'Luxury, premium', usage: 'Premium features' },
       fuchsia: { description: 'Vibrant, energetic', usage: 'Highlights, accents' },
       pink: { description: 'Playful, friendly', usage: 'Social features' },
-      rose: { description: 'Romantic, gentle', usage: 'Soft interactions' }
+      rose: { description: 'Romantic, gentle', usage: 'Soft interactions' },
     },
     grayScales: {
       slate: 'Cool gray with blue undertones',
       gray: 'Neutral gray',
       zinc: 'Cool gray with slight blue',
       neutral: 'Pure neutral gray',
-      stone: 'Warm gray with brown undertones'
+      stone: 'Warm gray with brown undertones',
     },
     shades: {
       50: 'Lightest shade - backgrounds, subtle highlights',
@@ -415,13 +414,13 @@ async function getUIColors(_nuxt: any): Promise<Record<string, any>> {
       700: 'Dark - active states',
       800: 'Very dark - headings, emphasis',
       900: 'Darkest - high contrast text',
-      950: 'Ultra dark - maximum contrast'
+      950: 'Ultra dark - maximum contrast',
     },
     usage: {
       example: 'color="emerald" or color="red"',
       customization: 'Define custom colors in app.config.ts under ui.colors',
-      dynamicUsage: ':color="isError ? "red" : "green""'
-    }
+      dynamicUsage: ':color="isError ? "red" : "green""',
+    },
   }
 }
 
@@ -436,7 +435,8 @@ function generateUIComponentTemplate({
   withProps: boolean
   withVariants: boolean
 }): string {
-  const propsInterface = withProps ? `
+  const propsInterface = withProps
+    ? `
 interface ${name}Props {
   ${getPropsForType(componentType)}
 }
@@ -444,13 +444,16 @@ interface ${name}Props {
 const props = withDefaults(defineProps<${name}Props>(), {
   ${getDefaultPropsForType(componentType)}
 })
-` : ''
+`
+    : ''
 
-  const variants = withVariants ? `
+  const variants = withVariants
+    ? `
 const variants = {
   ${getVariantsForType(componentType)}
 }
-` : ''
+`
+    : ''
 
   return `<script setup lang="ts">
 ${propsInterface}${variants}

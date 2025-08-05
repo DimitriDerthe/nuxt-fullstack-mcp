@@ -1,7 +1,8 @@
 import type { McpToolContext } from '../types'
 
 export function promptFullstack({ mcp, nuxt, modules }: McpToolContext): void {
-  if (!modules.hasNuxtUI || !modules.hasNuxtAuth || !modules.hasDrizzle) return
+  if (!modules.hasNuxtUI || !modules.hasNuxtAuth || !modules.hasDrizzle)
+    return
 
   mcp.prompt('fullstack-patterns', () => {
     const lines: string[] = []
