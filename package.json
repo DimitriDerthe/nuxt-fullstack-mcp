@@ -11,7 +11,7 @@
     "lint": "eslint",
     "release": "bumpp -r && pnpm -r publish",
     "test": "vitest",
-    "test:integration": "node packages/nuxt-mcp/test-integration.ts",
+    "test:integration": "tsx packages/nuxt-mcp/test-integration.ts",
     "inspect": "npx @modelcontextprotocol/inspector",
     "typecheck": "tsc --noEmit",
     "prepare": "simple-git-hooks && pnpm -r run dev:prepare",
