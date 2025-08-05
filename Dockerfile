@@ -1,24 +1,26 @@
-# Nuxt MCP Server - Simple Production Image
+# Optimized single-stage build for MCP Server
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm@10.14.0
-
-# Copy source code
-COPY . .
-
-# Install dependencies and build
-RUN pnpm install --no-frozen-lockfile
-RUN pnpm build
+# Install pnpm and clean apk cache
+RUN npm install -g pnpm@10.14.0 && \
+    rm -rf /var/cache/apk/*
 
 # Create nuxt user
-RUN addgroup --system --gid 1001 nuxt
-RUN adduser --system --uid 1001 nuxt
+RUN addgroup --system --gid 1001 nuxt && \
+    adduser --system --uid 1001 nuxt
 
-# Change ownership
-RUN chown -R nuxt:nuxt /app
+# Copy source code
+COPY --chown=nuxt:nuxt . .
+
+# Install dependencies, build, and clean up in one layer
+RUN pnpm install --no-frozen-lockfile && \
+    pnpm build && \
+    rm -rf node_modules && \
+    pnpm install --prod --no-frozen-lockfile --ignore-scripts && \
+    rm -rf /root/.npm /root/.pnpm-store /tmp/* && \
+    pnpm store prune
 
 USER nuxt
 
@@ -29,9 +31,5 @@ ENV NODE_ENV=production
 ENV PORT=4000
 ENV HOST=0.0.0.0
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node healthcheck.js
-
-# Start the MCP server (playground as example)
+# Start the MCP server
 CMD ["pnpm", "play"]

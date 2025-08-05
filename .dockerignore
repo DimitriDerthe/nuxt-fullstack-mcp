@@ -1,5 +1,4 @@
 node_modules
-dist
 .git
 .github
 *.log
@@ -13,3 +12,10 @@ coverage
 README.md
 *.md
 .eslintcache
+.vscode
+.cursor
+test
+vitest.config.ts
+.env*
+Dockerfile*
+docker-compose*
