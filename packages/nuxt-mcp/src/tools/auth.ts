@@ -1,4 +1,5 @@
 import type { AuthConfig, McpToolContext } from '../types'
+import process from 'node:process'
 import { z } from 'zod'
 
 export function toolsNuxtAuth({ mcp, nuxt, modules }: McpToolContext): void {
@@ -180,7 +181,7 @@ async function getAuthConfiguration(_nuxt: any): Promise<AuthConfig> {
     ],
     session: {
       name: 'nuxt-session',
-      password: globalThis.process?.env.NUXT_SESSION_PASSWORD || '',
+      password: process.env.NUXT_SESSION_PASSWORD || '',
       cookie: {
         httpOnly: true,
         secure: true,

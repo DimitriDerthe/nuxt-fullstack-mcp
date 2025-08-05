@@ -176,13 +176,13 @@ const users = await useDrizzleQuery('users', {
 })
 
 // Component props are fully typed
-<UButton
-  variant="primary"
-  size="lg"
-  :loading="isSubmitting"
->
-  Submit Form
-</UButton>
+// <UButton
+//  variant="primary"
+//  size="lg"
+//  :loading="isSubmitting"
+// >
+//  Submit Form
+// </UButton>
 ```
 
 ### MCP Context Sharing

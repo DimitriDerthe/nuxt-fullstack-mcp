@@ -228,7 +228,7 @@ function generateDesignSystem(name: string, personality: string[], platforms: st
 }
 
 // Design Tokens Generation
-function generateDesignTokens(types: string[], format: string, platform: string, semantic: boolean) {
+function generateDesignTokens(types: string[], format: string, platform: string, semantic: boolean): { format: string, platform: string, tokens: Record<string, any>, metadata: { version: string, createdAt: string, platforms: string[], tokenCount: number } } {
   const tokens: Record<string, any> = {}
 
   if (types.includes('colors')) {
@@ -302,7 +302,7 @@ function generateDesignTokens(types: string[], format: string, platform: string,
 }
 
 // Component Library Generation
-function buildComponentLibrary(framework: string, level: string, variants: boolean, accessibility: string) {
+function buildComponentLibrary(framework: string, level: string, variants: boolean, accessibility: string): { framework: string, atomicLevel: string, components: Array<{ name: string, level: string, variants: string[], accessibility: { wcagLevel: string, keyboardSupport: boolean, screenReaderSupport: boolean, colorContrast: string, focusManagement: boolean }, props: string[], examples: string }>, documentation: { storybook: Array<{ component: string, stories: string[], documentation: string }>, designGuidelines: string[], usagePatterns: string[] } } {
   const components = {
     atoms: ['Button', 'Input', 'Icon', 'Avatar', 'Badge', 'Spinner'],
     molecules: ['SearchBox', 'Dropdown', 'Card', 'Breadcrumb', 'Pagination'],
@@ -340,7 +340,7 @@ function buildComponentLibrary(framework: string, level: string, variants: boole
 }
 
 // Helper Functions
-function generateBrandColors(personality: string[]) {
+function generateBrandColors(personality: string[]): { primary: { 50: string, 500: string, 900: string }, secondary: { 50: string, 500: string, 900: string }, neutral: { 50: string, 500: string, 900: string } } {
   // Color selection based on brand personality
   const colorMappings = {
     professional: { primary: '#1e40af', secondary: '#64748b' },
@@ -364,7 +364,7 @@ function generateBrandColors(personality: string[]) {
   }
 }
 
-function generateTypographyScale(personality: string[], platforms: string[]) {
+function generateTypographyScale(personality: string[], platforms: string[]): { fontFamilies: { sans: string, mono: string }, fontSizes: Record<string, string>, fontWeights: { normal: number, medium: number, semibold: number, bold: number }, lineHeights: { tight: number, normal: number, relaxed: number }, letterSpacing: { tight: string, normal: string, wide: string } } {
   const isWebOnly = platforms.length === 1 && platforms[0] === 'web'
 
   return {
@@ -408,7 +408,7 @@ function generateTypographyScale(personality: string[], platforms: string[]) {
   }
 }
 
-function generateSpacingScale(complexity: string) {
+function generateSpacingScale(complexity: string): Record<string, string> {
   const scales = {
     minimal: { 1: '0.25rem', 2: '0.5rem', 4: '1rem', 8: '2rem' },
     standard: {
@@ -441,7 +441,7 @@ function generateSpacingScale(complexity: string) {
   return scales[complexity as keyof typeof scales] || scales.standard
 }
 
-function generateComponentSpecs(complexity: string) {
+function generateComponentSpecs(_complexity: string): Record<string, { variants: string[], sizes: string[], states: string[] }> {
   return {
     Button: {
       variants: ['primary', 'secondary', 'outline', 'ghost'],
@@ -457,7 +457,7 @@ function generateComponentSpecs(complexity: string) {
 }
 
 // Additional helper functions for component generation
-function getComponentLevel(name: string, components: Record<string, string[]>) {
+function getComponentLevel(name: string, components: Record<string, string[]>): string {
   for (const [level, items] of Object.entries(components)) {
     if (items.includes(name))
       return level
@@ -465,7 +465,7 @@ function getComponentLevel(name: string, components: Record<string, string[]>) {
   return 'atoms'
 }
 
-function generateComponentVariants(name: string) {
+function generateComponentVariants(name: string): string[] {
   const variantMappings = {
     Button: ['primary', 'secondary', 'outline', 'ghost', 'destructive'],
     Input: ['outline', 'filled', 'underlined'],
@@ -474,7 +474,7 @@ function generateComponentVariants(name: string) {
   return variantMappings[name as keyof typeof variantMappings] || ['default']
 }
 
-function generateAccessibilitySpecs(name: string, level: string) {
+function generateAccessibilitySpecs(_name: string, level: string): { wcagLevel: string, keyboardSupport: boolean, screenReaderSupport: boolean, colorContrast: string, focusManagement: boolean } {
   return {
     wcagLevel: level,
     keyboardSupport: true,
@@ -484,7 +484,7 @@ function generateAccessibilitySpecs(name: string, level: string) {
   }
 }
 
-function generateComponentProps(name: string, framework: string) {
+function generateComponentProps(name: string, _framework: string): string[] {
   // Simplified prop generation
   return {
     Button: ['variant', 'size', 'disabled', 'loading', 'onClick'],
@@ -492,7 +492,7 @@ function generateComponentProps(name: string, framework: string) {
   }[name] || ['children']
 }
 
-function generateComponentExamples(name: string, framework: string) {
+function generateComponentExamples(name: string, framework: string): string {
   if (framework === 'vue') {
     return {
       Button: '<UButton variant="primary" size="md">Click me</UButton>',
@@ -502,7 +502,7 @@ function generateComponentExamples(name: string, framework: string) {
   return `<${name} />`
 }
 
-function auditDesignConsistency(scope: string[], assets: string[], strictness: string) {
+function auditDesignConsistency(scope: string[], assets: string[], strictness: string): { scope: string[], assets: string[], strictness: string, score: number, issues: Array<{ category: string, severity: string, description: string, recommendation: string }>, standardizationPlan: string[] } {
   return {
     scope,
     assets,
@@ -531,7 +531,7 @@ function auditDesignConsistency(scope: string[], assets: string[], strictness: s
   }
 }
 
-function optimizeDesignPerformance(platforms: string[], priorities: string[], constraints: any) {
+function optimizeDesignPerformance(platforms: string[], priorities: string[], constraints: any): { platforms: string[], priorities: string[], constraints: any, optimizations: Array<{ area: string, recommendation: string, impact: string, implementation: string }> } {
   return {
     platforms,
     priorities,
@@ -553,7 +553,7 @@ function optimizeDesignPerformance(platforms: string[], priorities: string[], co
   }
 }
 
-function setupDesignGovernance(teamSize: string, frequency: string, model: string, approval: boolean) {
+function setupDesignGovernance(teamSize: string, frequency: string, model: string, approval: boolean): { teamSize: string, updateFrequency: string, contributionModel: string, approvalProcess: boolean, roles: Record<string, string>, processes: Record<string, string> } {
   return {
     teamSize,
     updateFrequency: frequency,
@@ -575,7 +575,7 @@ function setupDesignGovernance(teamSize: string, frequency: string, model: strin
 }
 
 // Configuration and setup functions
-function getDesignSystemImplementation() {
+function getDesignSystemImplementation(): { figma: string, storybook: string, development: string, testing: string } {
   return {
     figma: 'Set up design tokens plugin and component library',
     storybook: 'Configure Storybook with design tokens integration',
@@ -584,7 +584,7 @@ function getDesignSystemImplementation() {
   }
 }
 
-function getDesignSystemDocumentation() {
+function getDesignSystemDocumentation(): { structure: string[], maintenance: string, accessibility: string } {
   return {
     structure: ['Getting Started', 'Design Principles', 'Components', 'Patterns', 'Resources'],
     maintenance: 'Keep documentation in sync with code changes',
@@ -592,7 +592,7 @@ function getDesignSystemDocumentation() {
   }
 }
 
-function getFigmaStorybookWorkflow() {
+function getFigmaStorybookWorkflow(): { step1: string, step2: string, step3: string, step4: string, step5: string } {
   return {
     step1: 'Design tokens managed in Figma with Tokens Studio plugin',
     step2: 'Tokens exported to GitHub repository',
@@ -602,7 +602,7 @@ function getFigmaStorybookWorkflow() {
   }
 }
 
-function getTokenAutomationSetup() {
+function getTokenAutomationSetup(): { tools: string[], workflow: string, benefits: string[] } {
   return {
     tools: ['Tokens Studio', 'Style Dictionary', 'GitHub Actions'],
     workflow: 'Figma → GitHub → Transformation → Distribution',
@@ -610,7 +610,7 @@ function getTokenAutomationSetup() {
   }
 }
 
-function getStorybookConfiguration() {
+function getStorybookConfiguration(): { addons: string[], structure: string, documentation: string } {
   return {
     addons: ['@storybook/addon-docs', '@storybook/addon-controls', '@storybook/addon-a11y'],
     structure: 'Organized by atomic design levels',
@@ -618,7 +618,7 @@ function getStorybookConfiguration() {
   }
 }
 
-function getComponentTestingStrategy() {
+function getComponentTestingStrategy(): { unit: string, visual: string, accessibility: string, interaction: string } {
   return {
     unit: 'Test component logic and props',
     visual: 'Screenshot testing for visual regressions',
@@ -627,7 +627,7 @@ function getComponentTestingStrategy() {
   }
 }
 
-function getPerformanceImplementation() {
+function getPerformanceImplementation(): { codesplitting: string, treeshaking: string, caching: string, compression: string } {
   return {
     codesplitting: 'Split components by usage patterns',
     treeshaking: 'Eliminate unused code and styles',
@@ -636,7 +636,7 @@ function getPerformanceImplementation() {
   }
 }
 
-function getPerformanceMonitoring() {
+function getPerformanceMonitoring(): { metrics: string[], tools: string[], alerts: string } {
   return {
     metrics: ['Bundle size', 'Load time', 'Runtime performance'],
     tools: ['Bundle analyzer', 'Lighthouse', 'Core Web Vitals'],
@@ -644,7 +644,7 @@ function getPerformanceMonitoring() {
   }
 }
 
-function getGovernanceWorkflow() {
+function getGovernanceWorkflow(): { proposal: string, review: string, approval: string, implementation: string } {
   return {
     proposal: 'Submit RFC for significant changes',
     review: 'Design and code review process',
@@ -653,7 +653,7 @@ function getGovernanceWorkflow() {
   }
 }
 
-function getGovernanceTooling() {
+function getGovernanceTooling(): { versionControl: string, communication: string, documentation: string, tracking: string } {
   return {
     versionControl: 'Git with semantic versioning',
     communication: 'Slack/Discord for discussions',
@@ -662,7 +662,7 @@ function getGovernanceTooling() {
   }
 }
 
-function getStorybookStories(components: string[]) {
+function getStorybookStories(components: string[]): Array<{ component: string, stories: string[], documentation: string }> {
   return components.map(name => ({
     component: name,
     stories: ['Default', 'All Variants', 'Playground'],
@@ -670,7 +670,7 @@ function getStorybookStories(components: string[]) {
   }))
 }
 
-function getDesignGuidelines() {
+function getDesignGuidelines(): string[] {
   return [
     'Use consistent spacing from the design system',
     'Follow color usage guidelines for semantic meaning',
@@ -679,7 +679,7 @@ function getDesignGuidelines() {
   ]
 }
 
-function getUsagePatterns() {
+function getUsagePatterns(): string[] {
   return [
     'Import components from design system package',
     'Use design tokens instead of hardcoded values',

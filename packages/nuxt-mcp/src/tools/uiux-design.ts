@@ -177,7 +177,7 @@ export function toolsUIUXDesign({ mcp, modules }: McpToolContext): void {
 }
 
 // Landing Page Structure Generation
-function generateLandingPageStructure(businessType: string, goal: string, audience: string, keywords: string[]) {
+function generateLandingPageStructure(businessType: string, goal: string, _audience: string, keywords: string[]): { hero: any, problemAgitation: any, solution: any, socialProof: any, features: any, testimonials: any, pricing: any, faq: any, finalCta: any, footer: any, seoOptimization: any, conversionOptimization: any } {
   const baseStructure = {
     hero: {
       headline: {
@@ -274,7 +274,7 @@ function generateLandingPageStructure(businessType: string, goal: string, audien
 }
 
 // Dashboard Layout Generation
-function generateDashboardLayout(type: string, role: string, complexity: string, device: string) {
+function generateDashboardLayout(type: string, role: string, complexity: string, device: string): { structure?: string, sections?: any, responsive: { desktop: string, tablet: string, mobile: string }, accessibility: { navigation: string, focus: string, screenReader: string, contrast: string }, performance: { dataLoading: string, interactions: string, optimization: string }, usability: { cognitiveLoad: string, shortcuts: string, customization: string, help: string } } {
   const layouts = {
     'analytics': {
       structure: 'Grid-based with primary metrics prominently displayed',
@@ -371,7 +371,7 @@ function generateDashboardLayout(type: string, role: string, complexity: string,
 }
 
 // Helper functions
-function analyzeVisualHierarchy(type: string, elements: string[], goals: string[]) {
+function analyzeVisualHierarchy(_type: string, elements: string[], _goals: string[]): { score: number, currentHierarchy: Array<{ element: string, priority: number, issues: string[], recommendations: string[] }>, improvements: string[], bestPractices: { fLayout: string, zPattern: string, rule3: string, whitespace: string } } {
   return {
     score: 85,
     currentHierarchy: elements.map((el, index) => ({
@@ -428,7 +428,7 @@ function generateColorPalette(personality: string[], industry: string, baseColor
   }
 }
 
-function evaluateUserFlow(type: string, steps: string[], goal: string, painPoints: string[]) {
+function evaluateUserFlow(_type: string, steps: string[], _goal: string, painPoints: string[]): { currentSteps: string[], analysis: { dropOffPoints: string[], friction: string[], conversionRate: string }, optimizedSteps: string[], improvements: string[] } {
   return {
     currentSteps: steps,
     analysis: {
@@ -457,7 +457,7 @@ function getOptimalCTAText(goal: string): string {
   return ctas[goal as keyof typeof ctas] || 'Get Started'
 }
 
-function getColorPsychologyForGoal(goal: string) {
+function getColorPsychologyForGoal(_goal: string): { conversion: string, trust: string, luxury: string, eco: string } {
   return {
     conversion: 'Orange/red for urgency, green for positive action',
     trust: 'Blue for reliability, white for cleanliness',
@@ -466,7 +466,7 @@ function getColorPsychologyForGoal(goal: string) {
   }
 }
 
-function getConversionBestPractices(goal: string) {
+function getConversionBestPractices(_goal: string): string[] {
   return [
     'Single primary CTA per page',
     'Use action-oriented language',
@@ -477,7 +477,7 @@ function getConversionBestPractices(goal: string) {
   ]
 }
 
-function getSEOBestPractices(keywords: string[]) {
+function getSEOBestPractices(_keywords: string[]): string[] {
   return [
     'Primary keyword in title tag (first 60 chars)',
     'Meta description with primary keyword and CTA',
@@ -488,7 +488,7 @@ function getSEOBestPractices(keywords: string[]) {
   ]
 }
 
-function getDashboardPatterns(type: string) {
+function getDashboardPatterns(_type: string): string[] {
   return [
     'Progressive disclosure for complex data',
     'Card-based information architecture',
@@ -499,7 +499,7 @@ function getDashboardPatterns(type: string) {
   ]
 }
 
-function getDashboardUsabilityTips(complexity: string) {
+function getDashboardUsabilityTips(complexity: string): string[] {
   return complexity === 'complex'
     ? [
         'Use progressive disclosure',
@@ -517,7 +517,7 @@ function getDashboardUsabilityTips(complexity: string) {
       ]
 }
 
-function generateResponsiveBreakpoints(system: string, devices: string[], contentType: string) {
+function generateResponsiveBreakpoints(_system: string, _devices: string[], _contentType: string): { mobile: string, tablet: string, desktop: string, largeDesktop: string, implementation: string } {
   return {
     mobile: '320px - 768px',
     tablet: '768px - 1024px',
@@ -527,7 +527,7 @@ function generateResponsiveBreakpoints(system: string, devices: string[], conten
   }
 }
 
-function getColorImplementationGuide() {
+function getColorImplementationGuide(): { cssVariables: string, designTokens: string, accessibility: string, darkMode: string } {
   return {
     cssVariables: 'Use CSS custom properties for theme switching',
     designTokens: 'Implement design tokens for consistency',
@@ -536,7 +536,7 @@ function getColorImplementationGuide() {
   }
 }
 
-function getResponsiveImplementation() {
+function getResponsiveImplementation(): { approach: string, units: string, images: string, layout: string } {
   return {
     approach: 'Mobile-first responsive design',
     units: 'Use relative units (rem, em, %) over fixed pixels',
@@ -545,7 +545,7 @@ function getResponsiveImplementation() {
   }
 }
 
-function getResponsiveTestingStrategy() {
+function getResponsiveTestingStrategy(): string[] {
   return [
     'Test on real devices, not just browser dev tools',
     'Verify touch targets are minimum 44px',
@@ -555,7 +555,7 @@ function getResponsiveTestingStrategy() {
   ]
 }
 
-function getConversionOptimizationTips(flowType: string) {
+function getConversionOptimizationTips(flowType: string): string[] {
   const tips = {
     onboarding: [
       'Progressive onboarding over time',

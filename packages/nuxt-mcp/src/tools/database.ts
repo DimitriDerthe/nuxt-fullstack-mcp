@@ -1,4 +1,5 @@
 import type { DatabaseSchema, McpToolContext } from '../types'
+import process from 'node:process'
 import { z } from 'zod'
 
 export function toolsDatabase({ mcp, nuxt, modules }: McpToolContext): void {
@@ -677,7 +678,7 @@ DROP TABLE "${tableName}";`,
 async function getDatabaseConnection(_nuxt: any): Promise<any> {
   return {
     driver: 'sqlite', // or 'postgresql', 'mysql'
-    url: globalThis.process?.env.DATABASE_URL || 'file:./database.db',
+    url: process.env.DATABASE_URL || 'file:./database.db',
     connected: true,
     migrations: {
       folder: './drizzle',

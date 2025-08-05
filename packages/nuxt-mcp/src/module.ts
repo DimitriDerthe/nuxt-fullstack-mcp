@@ -2,6 +2,7 @@ import type { Nitro } from 'nitropack'
 import type { Unimport } from 'unimport'
 import type { ViteMcpOptions } from 'vite-plugin-mcp'
 import type { McpToolContext } from './types'
+import process from 'node:process'
 import { addVitePlugin, defineNuxtModule } from '@nuxt/kit'
 import { ViteMcp } from 'vite-plugin-mcp'
 import { promptAccessibilityExpert } from './prompts/accessibility-expert'
@@ -79,7 +80,7 @@ export default defineNuxtModule<ModuleOptions>({
           hasNuxtAuth: installedModules.includes('nuxt-auth-utils'),
           hasDrizzle: installedModules.some(m => m.includes('drizzle'))
             || Object.keys(nuxt.options.runtimeConfig.public || {}).some(k => k.includes('database'))
-            || Object.keys(globalThis.process?.env || {}).some(k => k.includes('DATABASE')),
+            || Object.keys(process.env).some(k => k.includes('DATABASE')),
           hasUIUXNeeds: true, // UI/UX expertise is always available for any project
         }
 

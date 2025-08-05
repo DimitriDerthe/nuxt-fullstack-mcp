@@ -174,7 +174,7 @@ export function toolsAccessibility({ mcp, modules }: McpToolContext): void {
 }
 
 // Core accessibility audit function
-function performAccessibilityAudit(pageType: string, wcagLevel: string, includeUsability: boolean, priority: string): AccessibilityAudit {
+function performAccessibilityAudit(_pageType: string, wcagLevel: string, _includeUsability: boolean, _priority: string): AccessibilityAudit {
   const issues = [
     {
       criterion: '1.4.3 Contrast (Minimum)',
@@ -252,7 +252,7 @@ function performAccessibilityAudit(pageType: string, wcagLevel: string, includeU
 }
 
 // Color contrast analysis
-function analyzeColorContrast(fg: string, bg: string, textSize: string, wcagLevel: string) {
+function analyzeColorContrast(fg: string, bg: string, textSize: string, wcagLevel: string): { foregroundColor: string, backgroundColor: string, contrastRatio: number, required: number, compliant: boolean, wcagLevel: string, textSize: string, recommendation: string } {
   // Simplified contrast calculation (in real implementation, would use proper color space calculations)
   const contrastRatio = 4.8 // Example calculated ratio
 
@@ -284,7 +284,7 @@ function analyzeColorContrast(fg: string, bg: string, textSize: string, wcagLeve
 }
 
 // Generate accessible color alternatives
-function generateAccessibleColorAlternatives(fg: string, bg: string, wcagLevel: string) {
+function generateAccessibleColorAlternatives(fg: string, bg: string, _wcagLevel: string): Array<{ foreground: string, background: string, contrastRatio: number, improvement: string }> {
   return [
     {
       foreground: '#222222',
@@ -308,7 +308,7 @@ function generateAccessibleColorAlternatives(fg: string, bg: string, wcagLevel: 
 }
 
 // ARIA labels generation
-function generateARIALabels(componentType: string, context: string, interactive: boolean, dynamic: boolean) {
+function generateARIALabels(componentType: string, context: string, interactive: boolean, dynamic: boolean): { required?: string[], optional?: string[], structure?: Record<string, string>, examples?: string[], contextSpecific: { purpose: string, dynamicHandling: string[], interactionGuidance: string[] } } {
   const guides = {
     navigation: {
       required: ['aria-label', 'role="navigation"'],
@@ -381,7 +381,7 @@ function generateARIALabels(componentType: string, context: string, interactive:
 }
 
 // Keyboard navigation design
-function designKeyboardNavigation(interfaceType: string, complexity: string, customShortcuts: boolean) {
+function designKeyboardNavigation(interfaceType: string, _complexity: string, customShortcuts: boolean): any {
   const patterns = {
     'dashboard': {
       tabOrder: ['Skip links', 'Main navigation', 'Content sections', 'Interactive elements'],
@@ -439,7 +439,7 @@ function designKeyboardNavigation(interfaceType: string, complexity: string, cus
 }
 
 // Screen reader optimization
-function optimizeForScreenReaders(contentType: string, hasMedia: boolean, hasDataViz: boolean, complexInteractions: boolean) {
+function optimizeForScreenReaders(contentType: string, hasMedia: boolean, hasDataViz: boolean, complexInteractions: boolean): { headingStructure: Record<string, string>, landmarks: string[], mediaOptimization: { images: string, videos: string, audio: string } | null, dataVisualization: { charts: string, graphs: string, infographics: string } | null, complexInteractions: { liveRegions: string, statusUpdates: string, progressIndicators: string } | null, readingOrder: string[] } {
   return {
     headingStructure: getOptimalHeadingStructure(contentType),
     landmarks: [
@@ -479,7 +479,7 @@ function optimizeForScreenReaders(contentType: string, hasMedia: boolean, hasDat
 }
 
 // Helper functions
-function getOptimalHeadingStructure(contentType: string) {
+function getOptimalHeadingStructure(contentType: string): Record<string, string> {
   const structures = {
     'landing-page': {
       h1: 'Main value proposition (only one per page)',
@@ -504,7 +504,7 @@ function getOptimalHeadingStructure(contentType: string) {
   return structures[contentType as keyof typeof structures] || structures.article
 }
 
-function getAccessibilityNextSteps(score: number) {
+function getAccessibilityNextSteps(score: number): string[] {
   if (score >= 90) {
     return ['Conduct user testing with disabled users', 'Fine-tune based on feedback', 'Document accessibility features']
   }
@@ -516,7 +516,7 @@ function getAccessibilityNextSteps(score: number) {
   }
 }
 
-function getColorImplementationGuide() {
+function getColorImplementationGuide(): { css: string, testing: string, tools: string[] } {
   return {
     css: 'Use CSS custom properties for easy theme switching',
     testing: 'Test with browser zoom up to 200%',
@@ -524,9 +524,9 @@ function getColorImplementationGuide() {
   }
 }
 
-function getARIAImplementationExamples(componentType: string) {
+function getARIAImplementationExamples(_componentType: string): { vue: string, testing: string, validation: string } {
   return {
-    vue: `<!-- Example ${componentType} with proper ARIA -->
+    vue: `<!-- Example ${_componentType} with proper ARIA -->
 <template>
   <div role="dialog" aria-modal="true" :aria-labelledby="titleId">
     <h2 :id="titleId">{{ title }}</h2>
@@ -538,7 +538,7 @@ function getARIAImplementationExamples(componentType: string) {
   }
 }
 
-function getARIATestingGuidance() {
+function getARIATestingGuidance(): string[] {
   return [
     'Test with actual screen readers, not just automated tools',
     'Verify focus management and navigation',
@@ -547,7 +547,7 @@ function getARIATestingGuidance() {
   ]
 }
 
-function getKeyboardImplementation() {
+function getKeyboardImplementation(): { focusManagement: string, visualIndicators: string, logicalOrder: string, shortcuts: string } {
   return {
     focusManagement: 'Always manage focus for dynamic content',
     visualIndicators: 'Provide clear focus indicators that meet 3:1 contrast ratio',
@@ -556,7 +556,7 @@ function getKeyboardImplementation() {
   }
 }
 
-function getKeyboardTestingStrategy() {
+function getKeyboardTestingStrategy(): string[] {
   return [
     'Navigate entire interface using only keyboard',
     'Test with screen reader in combination',
@@ -565,7 +565,7 @@ function getKeyboardTestingStrategy() {
   ]
 }
 
-function getScreenReaderExamples() {
+function getScreenReaderExamples(): { goodAltText: string, badAltText: string, goodButtonText: string, badButtonText: string, goodHeading: string, badHeading: string } {
   return {
     goodAltText: 'alt="Bar chart showing 40% increase in sales from January to March"',
     badAltText: 'alt="chart.png"',
@@ -576,7 +576,7 @@ function getScreenReaderExamples() {
   }
 }
 
-function validateAccessibilityPatterns(patterns: string[], framework: string, wcagLevel: string) {
+function validateAccessibilityPatterns(patterns: string[], framework: string, wcagLevel: string): { framework: string, wcagLevel: string, patterns: Array<{ name: string, compliant: boolean, issues: string[], solution: string }>, issues: Array<{ pattern: string, severity: 'serious', description: string, solution: string, codeExample: string }>, overallCompliance: number } {
   return {
     framework,
     wcagLevel,
