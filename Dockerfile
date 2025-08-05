@@ -17,7 +17,7 @@ COPY packages/nuxt-mcp/package.json ./packages/nuxt-mcp/
 COPY packages/vite-plugin-mcp/package.json ./packages/vite-plugin-mcp/
 
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
