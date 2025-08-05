@@ -79,7 +79,7 @@ export default defineNuxtModule<ModuleOptions>({
           hasNuxtAuth: installedModules.includes('nuxt-auth-utils'),
           hasDrizzle: installedModules.some(m => m.includes('drizzle'))
             || Object.keys(nuxt.options.runtimeConfig.public || {}).some(k => k.includes('database'))
-            || Object.keys(process.env).some(k => k.includes('DATABASE')),
+            || Object.keys(globalThis.process?.env || {}).some(k => k.includes('DATABASE')),
           hasUIUXNeeds: true, // UI/UX expertise is always available for any project
         }
 

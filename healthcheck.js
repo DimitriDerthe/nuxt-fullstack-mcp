@@ -1,4 +1,5 @@
 const http = require('node:http')
+const process = require('node:process')
 
 const options = {
   host: 'localhost',
@@ -9,7 +10,7 @@ const options = {
 }
 
 const request = http.request(options, (res) => {
-  console.log(`Health check status: ${res.statusCode}`)
+  console.error(`Health check status: ${res.statusCode}`)
   if (res.statusCode === 200) {
     process.exit(0)
   }
@@ -19,12 +20,12 @@ const request = http.request(options, (res) => {
 })
 
 request.on('error', (err) => {
-  console.log('Health check failed:', err.message)
+  console.error('Health check failed:', err.message)
   process.exit(1)
 })
 
 request.on('timeout', () => {
-  console.log('Health check timeout')
+  console.error('Health check timeout')
   request.destroy()
   process.exit(1)
 })

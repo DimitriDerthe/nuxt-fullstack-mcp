@@ -1,6 +1,6 @@
 import type { McpToolContext } from '../types'
 
-export function promptFullstack({ mcp, nuxt, modules }: McpToolContext): void {
+export function promptFullstack({ mcp, modules }: McpToolContext): void {
   if (!modules.hasNuxtUI || !modules.hasNuxtAuth || !modules.hasDrizzle)
     return
 
